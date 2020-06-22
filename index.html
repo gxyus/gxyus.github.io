@@ -229,7 +229,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/16/hello-world/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/22/MySQL%E7%9A%84%E9%80%92%E5%BD%92%E6%9F%A5%E8%AF%A2/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="John Doe">
@@ -248,7 +248,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2020/06/16/hello-world/" itemprop="url">Hello World</a></h1>
+                <a class="post-title-link" href="/2020/06/22/MySQL%E7%9A%84%E9%80%92%E5%BD%92%E6%9F%A5%E8%AF%A2/" itemprop="url">MySQL的递归查询</a></h1>
         
 
         <div class="post-meta">
@@ -260,8 +260,8 @@
               
                 <span class="post-meta-item-text">Posted on</span>
               
-              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-16T09:46:34+08:00">
-                2020-06-16
+              <time title="Post created" itemprop="dateCreated datePublished" datetime="2020-06-22T11:06:40+08:00">
+                2020-06-22
               </time>
             
 
@@ -300,19 +300,19 @@
       
         
           
-            <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
+            <h2 id="MySQL的递归查询"><a href="#MySQL的递归查询" class="headerlink" title="MySQL的递归查询"></a>MySQL的递归查询</h2><h3 id="sql函数代码块"><a href="#sql函数代码块" class="headerlink" title="sql函数代码块"></a>sql函数代码块</h3><p><code>DELIMITER $$</code></p>
+<p><code>USE hnibdp$$</code></p>
+<p><code>DROP FUNCTION IF EXISTS getProdInfo$$</code></p>
+<p><code>CREATE DEFINER=root@localhost FUNCTION getProdInfo(prodTreeId INT) RETURNS VARCHAR(1000) CHARSET utf8</code><br><code>BEGIN</code><br>       <code>DECLARE sTemp VARCHAR(1000);</code><br>       <code>DECLARE sTempChd VARCHAR(1000);</code>   </p>
+<pre><code>  SET sTemp = &apos;$&apos;; 
+  SET sTempChd =CAST(prodTreeId AS CHAR); 
+  WHILE sTempChd IS NOT NULL DO 
+    SET sTemp = CONCAT(sTemp,&apos;,&apos;,sTempChd); 
+    SELECT GROUP_CONCAT(PROD_TREE_ID) INTO sTempChd FROM prod_tree WHERE         FIND_IN_SET(PARENT_ID,sTempChd)&gt;0; 
+  END WHILE; 
+  RETURN sTemp; 
+END$$</code></pre><p><code>DELIMITER ;</code></p>
+<h3 id="find-in-set"><a href="#find-in-set" class="headerlink" title="find_in_set"></a>find_in_set</h3><p>select * from 表名 where find_in_set (字段名，数据集合)</p>
 
           
         
